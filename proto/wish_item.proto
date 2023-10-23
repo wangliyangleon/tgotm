@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package tgotm;
+
+message WishItemShoppingLink {
+    string url = 1;
+    ShopType shop_type = 2;
+
+    enum ShopType {
+        SHOP_TYPE_UNSPECIFIED = 0;
+        SHOP_TYPE_AMAZON = 1;
+        SHOP_TYPE_TAOBAO = 2;
+    }
+}
+
+message WishItem {
+  int64 id = 1;
+  string name = 2;
+  repeated WishItemShoppingLink shopping_links = 3;
+}

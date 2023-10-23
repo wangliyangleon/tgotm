@@ -1,0 +1,4 @@
+tornado==6.3.3
+protobuf==4.24.4
+pymongo==4.5.0
+motor==3.3.1

@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+package tgotm;
+
+message Account {
+  string public_id = 1;
+  string email = 2;
+  string name = 3;
+  string avatar_url = 4;
+}
