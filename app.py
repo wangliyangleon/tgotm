@@ -50,11 +50,37 @@ class IndexHandler(BaseHandler):
     def initialize(self):
         self._storage = StorageLayer(self.settings["db_client"])
 
+    def populate_wish_item(self, id, name, link_url, shop_type):
+        wish_item = wish_item_pb2.WishItem()
+        wish_item.id = id
+        wish_item.name = name
+        link = wish_item.shopping_links.add()
+        link.url = link_url
+        link.shop_type = shop_type
+        return wish_item
+
     @web.authenticated
     async def get(self):
-        _logged_in_account = await self._storage.get_user_profile(escape.xhtml_escape(self.current_user))
-        self.write('Hello %s! <a href="%s">Here</a> is your wishlist.' %
-            (_logged_in_account.name, _logged_in_account.public_id))
+        logged_in_account = await self._storage.get_user_profile(escape.xhtml_escape(self.current_user))
+        wish_items = []
+        wish_items.append(
+            self.populate_wish_item(1,
+                                    "Leica M11",
+                                    "https://leica-store.sg/products/leica-m11-silver",
+                                    wish_item_pb2.WishItemShoppingLink.ShopType.SHOP_TYPE_UNSPECIFIED))
+        wish_items.append(
+            self.populate_wish_item(2,
+                                    "Leica Elmarit-M 28mm F/2.8 ASPH",
+                                    "https://leica-store.sg/products/leica-elmarit-m-28mm-f-2-8-asph-black",
+                                    wish_item_pb2.WishItemShoppingLink.ShopType.SHOP_TYPE_UNSPECIFIED))
+        wish_items.append(
+            self.populate_wish_item(3,
+                                    "PlayStation 5",
+                                    "https://www.amazon.com/PlayStation-5-Console-CFI-1215A01X/dp/B0BCNKKZ91/ref=sr_1_3?crid=DP4ND9EB4I9J&keywords=ps5&qid=1697793757&sprefix=ps%2Caps%2C312&sr=8-3&th=1",
+                                    wish_item_pb2.WishItemShoppingLink.ShopType.SHOP_TYPE_AMAZON))
+        self.render("index.html",
+                    account=logged_in_account,
+                    wish_items=wish_items)
 
 class WishlistHandler(web.RequestHandler):
     def initialize(self):

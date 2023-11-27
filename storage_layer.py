@@ -7,6 +7,16 @@ class StorageLayer():
     def __init__(self, db_client):
         self._db = db_client.tgotm
 
+    async def create_new_wish(self, user_id: str) -> str:
+        chars = string.ascii_uppercase + string.ascii_lowercase +  string.digits
+        wish_id = ""
+        while True:
+            wish_id = ''.join(random.choice(chars) for _ in range(8))
+            print("Try creating new wish for user %s" % (wish_id, user_id))
+            if await self._db["user_wishes"].find_one({"wish_id": wish_id, "user_id": user_id}) is None:
+                break
+        return wish_id
+
     async def create_new_user(self, email: str, name: str) -> str:
         chars = string.ascii_uppercase + string.ascii_lowercase +  string.digits
         public_id = ""

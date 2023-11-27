@@ -1,0 +1,14 @@
+<html>
+   <head>
+      <title>Welcome! {{ account.name }}</title>
+   </head>
+   <body>
+     <p>Here's your wishlist</p>
+     <ul>
+       {% for item in wish_items %}
+         <li>{{ item.name }} | <a href="{{ item.shopping_links[0].url }}">Buy now</a></li>
+       {% end %}
+     </ul>
+     <p>Wishlist of your friend <a href="{{ account.public_id }}">{{ account.name }}</a></p>
+   </body>
+ </html>
